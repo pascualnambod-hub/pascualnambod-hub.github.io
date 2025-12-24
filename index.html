@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maki House | Comida Japonesa</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f8f8;
+      color: #333;
+    }
+    header {
+      background: #111;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.2em;
+    }
+    nav {
+      background: #c62828;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 10px;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .hero {
+      background: url('https://scontent-hou1-1.xx.fbcdn.net/v/t39.30808-6/499922610_1170763514804881_8651027106977021029_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeEFz1qoeRo8LNKcizeLSnl8H-cjbg7Gonwf5yNuDsaifJdq5EP1kBYEAENysQ2JUm_hoBLOdyH5cxqvxf3GoJrT&_nc_ohc=2HGS_EuhgeAQ7kNvwFjdSYX&_nc_oc=AdmvKQoOJDDBF5-rTw2iqSky-QdPqacTnZ-1VvwxbkMyaAfkreCCkUkT8hJsmeXMQgM&_nc_zt=23&_nc_ht=scontent-hou1-1.xx&_nc_gid=AfUd8Tm_sGTyVw61xKER6g&oh=00_AfmPXm_FTfE6Zhcdm3P7u5tOKnmG51L5MlB4iN22DwSPvQ&oe=6950A160') center 10%/contain no-repeat;
+      background-size: 90%;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-shadow: 1px 1px 5px black;
+    }
+    .hero h2 {
+      font-size: 2.5em;
+      background: rgba(0,0,0,0.5);
+      padding: 15px 25px;
+      border-radius: 10px;
+    }
+    section {
+      padding: 40px 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+    section h3 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #c62828;
+    }
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      text-align: center;
+    }
+    .card h4 {
+      margin-bottom: 10px;
+    }
+    .price {
+      color: #c62828;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    .contact {
+      text-align: center;
+    }
+    .contact a {
+      display: inline-block;
+      margin-top: 15px;
+      background: #25D366;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    footer {
+      background: #111;
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+      margin-top: 40px;
+      font-size: 0.9em;
+    }
+    /* ===== AJUSTES PARA CELULAR ===== */
+@media (max-width: 768px) {
+
+  header h1 {
+    font-size: 1.6em;
+  }
+
+  nav {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .hero {
+    height: 220px;               /* más compacto en celular */
+    background-size: contain;    /* evita recortes */
+    background-position: center 65%;
+  }
+
+  .hero h2 {
+    font-size: 1.4em;
+    padding: 10px 15px;
+  }
+
+  section {
+    padding: 25px 15px;
+  }
+
+  .menu {
+    grid-template-columns: 1fr;  /* una tarjeta por fila */
+  }
+
+  .card {
+    padding: 15px;
+  }
+
+  .contact a {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>INUGAMI SUSHI</h1>
+  <p>DE LA COCINA A LA PUERTA DE TU CASA 🍣</p>
+</header>
+
+<nav>
+  <a href="#menu">Menú</a>
+  <a href="#nosotros">Nosotros</a>
+  <a href="#contacto">Contacto</a>
+</nav>
+
+<div class="hero">
+  <h2>Makis, Sushi y más</h2>
+</div>
+
+<section id="menu">
+  <h3>Nuestro Menú</h3>
+  <div class="menu">
+    <div class="card">
+      <h4>Maki California</h4>
+      <p>Surimi o camarón, aguacate y pepino</p>
+      <p class="price">$80 MXN</p>
+      <button onclick="addToCart('Maki California', 80)">Agregar</button>
+    </div>
+    <div class="card">
+      <h4>Maki Clásico</h4>
+      <p>Queso crema, manchego y carne elegida(camarón, pollo, arrachera, salmón, cangrejo)</p>
+      <p class="price">$80 MXN</p>
+      <button onclick="addToCart('Maki Clásico', 80)">Agregar</button>
+    </div>
+    <div class="card">
+      <h4>Gohan</h4>
+      <p>Arroz al vapor, aguacate, carne de su elección (camarón, pollo, arrachera)</p>
+      <p class="price">$60 MXN</p>
+      <button onclick="addToCart('Gohan', 60)">Agregar</button>
+    </div>
+    <div class="card">
+      <h4>Brochetas</h4>
+      <p>Queso crema, manchego, camarón, arrachera y pollo</p>
+      <p class="price">$22 MXN</p>
+      <button onclick="addToCart('Brochetas', 22)">Agregar</button>
+    </div>
+    <div class="card">
+      <h4>Maki Titanic</h4>
+      <p>Queso crema, Philadelphia, pepino, aguacate, cangrejo, doble alga</p>
+      <p class="price">$125 MXN</p>
+      <button onclick="addToCart('Maki Titanic', 125)">Agregar</button>
+    </div>
+    <div class="card">
+      <h4>Yakimeshi</h4>
+      <p>Arroz frito con verduras y proteína(pollo, arrachera o camarón)</p>
+      <p class="price">$80 MXN</p>
+      <button onclick="addToCart('Yakimeshi', 80)">Agregar</button>
+    </div>
+    <div class="card">
+      <h4>Pasta udon</h4>
+      <p>Pasta udon, verduras en juliana, salsa kushiague y carne de su elección (pollo, arrachera y camarón)</p>
+      <p class="price">$80 MXN</p>
+      <button onclick="addToCart('Pasta udon ', 80)">Agregar</button>
+    </div>
+    <div class="card">
+      <h4>Bebidas</h4>
+      <p>Calpi, cocacola</p>
+      <p class="price">$20 MXN</p>
+      <button onclick="addToCart('Bebidas', 20)">Agregar</button>
+    </div>
+  </div>
+</section>
+
+<section id="nosotros">
+  <h3>Sobre Nosotros</h3>
+  <p style="text-align:center; max-width:800px; margin:auto;">
+    En <strong>Inugami Sushi</strong> preparamos comida japonesa fresca y deliciosa,
+    utilizando ingredientes de calidad y recetas que combinan tradición y sabor.
+    Perfecto para compartir con amigos o disfrutar en casa.
+  </p>
+</section>
+<section id="horarios">
+  <h3>Horarios y Días de Servicio</h3>
+  <div class="horarios">
+    <p><strong>Domíngo:</strong> Cerrado</p>
+    <p><strong>Lunes a Viernes:</strong> 1:00 PM – 6:00 PM</p>
+    <p><strong>Sábado:</strong> 1:00 PM – 4:00 PM</p>
+  </div>
+</section>
+
+<section id="contacto" class="contact">
+  <h3>Pedidos y Contacto</h3>
+  <p>📍 El Pedregal,Huiramba, Michoacán</p>
+  <p>📞 Pedidos por WhatsApp</p>
+  <p>costo de envío: Huiramba $20.00 Lagunillas $50.00</p>
+  <a href="https://wa.me/524341154467" target="_blank">Ordenar ahora</a>
+</section>
+
+<footer>
+  <p>© 2025 Inugami Sushi | Todos los derechos reservados</p>
+</footer>
+
+<div id="cart" class="cart">
+  <h4>🛒 Tu pedido</h4>
+  <ul id="cart-items"></ul>
+  <p><strong>Total:</strong> $<span id="cart-total">0</span> MXN</p>
+  <label for="zona"><strong>Zona de envío:</strong></label>
+<select id="zona" onchange="renderCart()">
+  <option value="0">Selecciona tu zona</option>
+  <option value="20">Huiramba ($20)</option>
+  <option value="50">Lagunillas ($50)</option>
+</select>
+
+<p><strong>Envío:</strong> $<span id="envio">0</span> MXN</p>
+<p><strong>Total final:</strong> $<span id="total-final">0</span> MXN</p>
+<button id="checkout" style="
+  margin-top:15px;
+  padding:12px;
+  width:100%;
+  background:#25D366;
+  color:white;
+  border:none;
+  border-radius:8px;
+  font-size:16px;
+  cursor:pointer;
+">
+📲 Enviar pedido por WhatsApp
+</button>
+
+
+  </div>
+
+  <script>
+const cart = {};
+const cartItems = document.getElementById('cart-items');
+const cartTotal = document.getElementById('cart-total');
+const envioSpan = document.getElementById('envio');
+const totalFinalSpan = document.getElementById('total-final');
+
+function addToCart(name, price) {
+  if (cart[name]) {
+    cart[name].qty += 1;
+  } else {
+    cart[name] = { price: price, qty: 1 };
+  }
+  renderCart();
+}
+
+function renderCart() {
+  cartItems.innerHTML = '';
+  let subtotal = 0;
+
+  for (let item in cart) {
+    const itemTotal = cart[item].price * cart[item].qty;
+    subtotal += itemTotal;
+
+    const li = document.createElement('li');
+    li.innerHTML = `
+      ${item} x${cart[item].qty} - $${itemTotal}
+      <span onclick="removeItem('${item}')" style="cursor:pointer;color:red;"> ✖</span>
+    `;
+    cartItems.appendChild(li);
+  }
+
+  const envio = parseInt(document.getElementById('zona').value) || 0;
+
+  cartTotal.textContent = subtotal;
+  envioSpan.textContent = envio;
+  totalFinalSpan.textContent = subtotal + envio;
+}
+
+function removeItem(name) {
+  delete cart[name];
+  renderCart();
+}
+</script>
+<script>
+document.getElementById('checkout').onclick = () => {
+
+  if (Object.keys(cart).length === 0) {
+    alert('Tu carrito está vacío');
+    return;
+  }
+
+  const zonaSelect = document.getElementById('zona');
+  const envio = parseInt(zonaSelect.value);
+
+  if (!envio) {
+    alert('Por favor selecciona tu zona de envío');
+    return;
+  }
+
+  let mensaje = '🍣 *Pedido Inugami Sushi* 🍣%0A%0A';
+  let subtotal = 0;
+
+  for (let item in cart) {
+    const totalItem = cart[item].price * cart[item].qty;
+    subtotal += totalItem;
+    mensaje += `• ${item} x${cart[item].qty} - $${totalItem}%0A`;
+  }
+
+  mensaje += `%0A💵 Subtotal: $${subtotal}`;
+  mensaje += `%0A🚚 Envío (${zonaSelect.options[zonaSelect.selectedIndex].text}): $${envio}`;
+  mensaje += `%0A💰 *Total: $${subtotal + envio} MXN*`;
+
+  const telefono = '524341154467';
+  window.open(`https://wa.me/${telefono}?text=${mensaje}`, '_blank');
+};
+</script>
+
