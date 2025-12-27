@@ -5,6 +5,75 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Maki House | Comida Japonesa</title>
   <style>
+    /* ===== CARRITO FLOTANTE ===== */
+.cart {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 320px;
+  max-height: 80vh;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+  padding: 15px;
+  overflow-y: auto;
+  z-index: 9999;
+}
+
+.cart h4 {
+  margin-top: 0;
+  text-align: center;
+  color: #c62828;
+}
+
+.cart ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+}
+
+.cart li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.cart select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  margin-top: 5px;
+}
+
+.cart button {
+  margin-top: 15px;
+  padding: 12px;
+  width: 100%;
+  background: #25D366;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.cart button:hover {
+  background: #1ebe5d;
+}
+
+/* ===== CARRITO EN CELULAR ===== */
+@media (max-width: 768px) {
+  .cart {
+    width: 95%;
+    left: 2.5%;
+    right: auto;
+    bottom: 10px;
+  }
+}
+
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -219,31 +288,39 @@
 
   <div id="cart" class="cart">
   <h4>🛒 Tu pedido</h4>
+  <label for="cliente"><strong>Nombre del cliente:</strong></label>
+<input 
+  type="text" 
+  id="cliente" 
+  placeholder="Escribe tu nombre"
+  style="
+    width:100%;
+    padding:8px;
+    margin:5px 0 10px 0;
+    border-radius:6px;
+    border:1px solid #ccc;
+  "
+>
+
+
   <ul id="cart-items"></ul>
+
   <p><strong>Total:</strong> $<span id="cart-total">0</span> MXN</p>
+
   <label for="zona"><strong>Zona de envío:</strong></label>
-<select id="zona" onchange="renderCart()">
-  <option value="0">Selecciona tu zona</option>
-  <option value="20">Huiramba ($20)</option>
-  <option value="50">Lagunillas ($50)</option>
-</select>
+  <select id="zona" onchange="renderCart()">
+    <option value="0">Selecciona tu zona</option>
+    <option value="20">Huiramba ($20)</option>
+    <option value="50">Lagunillas ($50)</option>
+  </select>
 
-<p><strong>Envío:</strong> $<span id="envio">0</span> MXN</p>
-<p><strong>Total final:</strong> $<span id="total-final">0</span> MXN</p>
-<button id="checkout" style="
-  margin-top:15px;
-  padding:12px;
-  width:100%;
-  background:#25D366;
-  color:white;
-  border:none;
-  border-radius:8px;
-  font-size:16px;
-  cursor:pointer;
-">
-📲 Enviar pedido por WhatsApp
-</button>
+  <p><strong>Envío:</strong> $<span id="envio">0</span> MXN</p>
+  <p><strong>Total final:</strong> $<span id="total-final">0</span> MXN</p>
 
+  <button id="checkout">
+    📲 Enviar pedido por WhatsApp
+  </button>
+</div>
 
   </div>
 
@@ -299,6 +376,12 @@ document.getElementById('checkout').onclick = () => {
     return;
   }
 
+  const nombre = document.getElementById('cliente').value.trim();
+  if (!nombre) {
+    alert('Por favor escribe tu nombre');
+    return;
+  }
+
   const zonaSelect = document.getElementById('zona');
   const envio = parseInt(zonaSelect.value);
 
@@ -308,6 +391,8 @@ document.getElementById('checkout').onclick = () => {
   }
 
   let mensaje = '🍣 *Pedido Inugami Sushi* 🍣%0A%0A';
+  mensaje += `👤 *Cliente:* ${nombre}%0A%0A`;
+
   let subtotal = 0;
 
   for (let item in cart) {
@@ -323,6 +408,7 @@ document.getElementById('checkout').onclick = () => {
   const telefono = '524341154467';
   window.open(`https://wa.me/${telefono}?text=${mensaje}`, '_blank');
 };
+
 </script>
 
 <section id="nosotros">
@@ -353,5 +439,4 @@ document.getElementById('checkout').onclick = () => {
 <footer>
   <p>© 2025 Inugami Sushi | Todos los derechos reservados</p>
 </footer>
-
 
