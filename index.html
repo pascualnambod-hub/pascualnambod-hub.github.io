@@ -63,6 +63,46 @@
 .cart button:hover {
   background: #1ebe5d;
 }
+/* ===== BOTÓN CARRITO ===== */
+#cart-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #c62828;
+  color: white;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  display: none; /* OCULTO por defecto */
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  z-index: 10000;
+}
+
+#cart-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #25D366;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
+/* ===== CARRITO OCULTO ===== */
+.cart {
+  display: none;
+}
+
+/* ===== CARRITO ACTIVO ===== */
+.cart.active {
+  display: block;
+}
+
 
 /* ===== CARRITO EN CELULAR ===== */
 @media (max-width: 768px) {
@@ -215,6 +255,10 @@
 
   </style>
 </head>
+<div id="cart-button" onclick="toggleCart()">
+  🛒 <span id="cart-count">0</span>
+</div>
+
 <body>
 
 <header>
@@ -330,6 +374,10 @@ const cartItems = document.getElementById('cart-items');
 const cartTotal = document.getElementById('cart-total');
 const envioSpan = document.getElementById('envio');
 const totalFinalSpan = document.getElementById('total-final');
+function toggleCart() {
+  document.getElementById('cart').classList.toggle('active');
+}
+
 
 function addToCart(name, price) {
   if (cart[name]) {
@@ -343,10 +391,12 @@ function addToCart(name, price) {
 function renderCart() {
   cartItems.innerHTML = '';
   let subtotal = 0;
+  let totalItems = 0;
 
   for (let item in cart) {
     const itemTotal = cart[item].price * cart[item].qty;
     subtotal += itemTotal;
+    totalItems += cart[item].qty;
 
     const li = document.createElement('li');
     li.innerHTML = `
@@ -361,7 +411,20 @@ function renderCart() {
   cartTotal.textContent = subtotal;
   envioSpan.textContent = envio;
   totalFinalSpan.textContent = subtotal + envio;
+
+  /* ===== MOSTRAR / OCULTAR BOTÓN ===== */
+  const cartButton = document.getElementById('cart-button');
+  const cartCount = document.getElementById('cart-count');
+
+  if (totalItems > 0) {
+    cartButton.style.display = 'flex';
+    cartCount.textContent = totalItems;
+  } else {
+    cartButton.style.display = 'none';
+    document.getElementById('cart').classList.remove('active');
+  }
 }
+
 
 function removeItem(name) {
   delete cart[name];
