@@ -41,8 +41,14 @@
     }
 
     .piñata {
-      font-size: 70px;
+      font-size: 80px;
       margin-top: 20px;
+      animation: saltar 1s infinite;
+    }
+
+    @keyframes saltar {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
   </style>
 </head>
@@ -64,14 +70,12 @@
   <script>
     function romperPinata() {
       const nombre = document.getElementById("nombre").value.trim();
-
-      if (nombre === "") {
-        alert("Por favor ingresa el nombre del participante");
+      if (!nombre) {
+        alert("Ingresa el nombre del participante");
         return;
       }
 
       const audio = document.getElementById("audioIntro");
-
       audio.currentTime = 0;
       audio.play();
 
@@ -80,8 +84,20 @@
 
         const voz = new SpeechSynthesisUtterance(mensaje);
         voz.lang = "es-MX";
-        voz.rate = 0.9;
-        voz.pitch = 1;
+
+        // 🎤 VOZ CARICATURA
+        voz.pitch = 1.9;   // más aguda
+        voz.rate = 0.75;   // más lenta
+        voz.volume = 1;
+
+        // Intentar elegir voz infantil si existe
+        const voces = speechSynthesis.getVoices();
+        const vozInfantil = voces.find(v =>
+          v.lang.includes("es") && v.name.toLowerCase().includes("child")
+        );
+        if (vozInfantil) {
+          voz.voice = vozInfantil;
+        }
 
         speechSynthesis.speak(voz);
       };
