@@ -34,10 +34,6 @@
       cursor: pointer;
     }
 
-    button:hover {
-      background: #c0392b;
-    }
-
     .piñata {
       font-size: 60px;
       margin: 20px 0;
@@ -54,9 +50,9 @@
 
   <div class="piñata">🪅</div>
 
-  <!-- Audio previo (TU ARCHIVO) -->
-  <audio id="audioIntro">
-    <source src="piñata - SD 480p.mov" type="video/quicktime">
+  <!-- AUDIO REAL (MP3 o WAV) -->
+  <audio id="audioIntro" preload="auto">
+    <source src="pinata.mp3" type="audio/mpeg">
   </audio>
 
   <script>
@@ -70,21 +66,22 @@
       const audio = document.getElementById("audioIntro");
 
       audio.currentTime = 0;
-      audio.play();
+      audio.play().then(() => {
+        audio.onended = () => {
+          const mensaje = `${nombre} es muy tonte, es muy tonte, se parece a su mamá`;
 
-      audio.onended = () => {
-        const mensaje = `${nombre} es muy tonte, es muy tonte, se parece a su mamá`;
+          const voz = new SpeechSynthesisUtterance(mensaje);
+          voz.lang = "es-MX";
+          voz.rate = 0.9;
+          voz.pitch = 1;
 
-        const voz = new SpeechSynthesisUtterance(mensaje);
-        voz.lang = "es-MX";
-        voz.rate = 0.9;
-        voz.pitch = 1;
-
-        speechSynthesis.speak(voz);
-      };
+          speechSynthesis.speak(voz);
+        };
+      }).catch(() => {
+        alert("Activa el sonido del dispositivo");
+      });
     }
   </script>
 
 </body>
 </html>
-
