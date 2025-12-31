@@ -20,17 +20,19 @@
     input {
       padding: 10px;
       font-size: 16px;
-      width: 250px;
+      width: 260px;
       margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
 
     button {
-      padding: 12px 20px;
+      padding: 12px 22px;
       font-size: 16px;
       background: #e74c3c;
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 6px;
       cursor: pointer;
     }
 
@@ -39,8 +41,8 @@
     }
 
     .piñata {
-      font-size: 60px;
-      margin: 20px 0;
+      font-size: 70px;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -54,15 +56,17 @@
 
   <div class="piñata">🪅</div>
 
- <audio id="audioIntro" preload="auto">
-    <source src="pinata.mp4" type="audio/mpeg">
+  <!-- Audio previo -->
+  <audio id="audioIntro">
+    <source src="pinata.mp4" type="video/mp4">
   </audio>
 
   <script>
     function romperPinata() {
       const nombre = document.getElementById("nombre").value.trim();
-      if (!nombre) {
-        alert("Ingresa el nombre del participante");
+
+      if (nombre === "") {
+        alert("Por favor ingresa el nombre del participante");
         return;
       }
 
@@ -72,7 +76,7 @@
       audio.play();
 
       audio.onended = () => {
-        const mensaje = `${nombre} es muy tonte, es muy tonte, se parece a su mamá`;
+        const mensaje = `${nombre} es muy tonto, es muy tonto, se parece a su papá`;
 
         const voz = new SpeechSynthesisUtterance(mensaje);
         voz.lang = "es-MX";
@@ -86,3 +90,4 @@
 
 </body>
 </html>
+
