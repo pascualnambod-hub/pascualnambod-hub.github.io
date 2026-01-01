@@ -62,47 +62,43 @@
 
   <div class="piñata">🪅</div>
 
-  <!-- Audio previo -->
-  <audio id="audioIntro">
-    <source src="pinata.mp4" type="video/mp4">
-  </audio>
+ <audio id="audioIntro" preload="auto">
+  <source src="pinata.mp3" type="audio/mpeg">
+</audio>
 
-  <script>
-    function romperPinata() {
-      const nombre = document.getElementById("nombre").value.trim();
-      if (!nombre) {
-        alert("Ingresa el nombre del participante");
-        return;
-      }
 
-      const audio = document.getElementById("audioIntro");
-      audio.currentTime = 0;
-      audio.play();
-
-      audio.onended = () => {
-        const mensaje = `${nombre} es muy tonte, es muy tonte, se parece a su mamá`;
-
-        const voz = new SpeechSynthesisUtterance(mensaje);
-        voz.lang = "es-MX";
-
-        // 🎤 VOZ CARICATURA
-        voz.pitch = 1.9;   // más aguda
-        voz.rate = 0.75;   // más lenta
-        voz.volume = 1;
-
-        // Intentar elegir voz infantil si existe
-        const voces = speechSynthesis.getVoices();
-        const vozInfantil = voces.find(v =>
-          v.lang.includes("es") && v.name.toLowerCase().includes("child")
-        );
-        if (vozInfantil) {
-          voz.voice = vozInfantil;
-        }
-
-        speechSynthesis.speak(voz);
-      };
+ <script>
+  function romperPinata() {
+    const nombre = document.getElementById("nombre").value.trim();
+    if (!nombre) {
+      alert("Ingresa el nombre del participante");
+      return;
     }
-  </script>
 
-</body>
-</html>
+    const audio = document.getElementById("audioIntro");
+
+    // Forzar reproducción en iPhone
+    audio.load();
+    audio.currentTime = 0;
+
+    audio.play().then(() => {
+      console.log("Audio intro reproduciendo");
+    }).catch(err => {
+      alert("Toca nuevamente el botón para activar el audio 🔊");
+      return;
+    });
+
+    audio.onended = () => {
+      const mensaje = `${nombre} es muy tonto, es muy tonto, se parece a su mamá`;
+
+      const voz = new SpeechSynthesisUtterance(mensaje);
+      voz.lang = "es-MX";
+      voz.pitch = 1.9;
+      voz.rate = 0.75;
+      voz.volume = 1;
+
+      speechSynthesis.cancel();
+      speechSynthesis.speak(voz);
+    };
+  }
+</script>
