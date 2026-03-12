@@ -1,646 +1,485 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Maki House | Comida Japonesa</title>
-  <style>
-    /* ===== CARRITO FLOTANTE ===== */
-.cart {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 320px;
-  max-height: 80vh;
-  background: #ffffff;
-  border-radius: 15px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-  padding: 15px;
-  overflow-y: auto;
-  z-index: 9999;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inugami Sushi</title>
+
+<style>
+
+body{
+font-family:Arial;
+margin:0;
+background:#f4f4f4;
 }
 
-.cart h4 {
-  margin-top: 0;
-  text-align: center;
-  color: #c62828;
+header{
+background:#111;
+color:white;
+text-align:center;
+padding:20px;
 }
 
-.cart ul {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 10px 0;
+header h1{
+margin:0;
 }
 
-.cart li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-  padding: 6px 0;
-  border-bottom: 1px solid #eee;
+.categorias{
+display:flex;
+overflow-x:auto;
+gap:10px;
+padding:10px;
+background:white;
+position:sticky;
+top:0;
+z-index:1000;
 }
 
-.cart select {
-  width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  margin-top: 5px;
+.categorias button{
+background:#c62828;
+color:white;
+border:none;
+padding:8px 15px;
+border-radius:20px;
+cursor:pointer;
 }
 
-.cart button {
-  margin-top: 15px;
-  padding: 12px;
-  width: 100%;
-  background: #25D366;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
+.menu{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+padding:20px;
 }
 
-.cart button:hover {
-  background: #1ebe5d;
-}
-/* ===== BOTÓN CARRITO ===== */
-#cart-button {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #c62828;
-  color: white;
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  display: none; /* OCULTO por defecto */
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  cursor: pointer;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-  z-index: 10000;
+.card{
+background:white;
+border-radius:12px;
+padding:15px;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
 }
 
-#cart-count {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  background: #25D366;
-  color: white;
-  font-size: 12px;
-  padding: 2px 6px;
-  border-radius: 50%;
+.price{
+color:#c62828;
+font-weight:bold;
 }
 
-/* ===== CARRITO OCULTO ===== */
-.cart {
-  display: none;
+.card button{
+background:#c62828;
+color:white;
+border:none;
+width:35px;
+height:35px;
+border-radius:50%;
+font-size:18px;
+cursor:pointer;
+float:right;
 }
 
-/* ===== CARRITO ACTIVO ===== */
-.cart.active {
-  display: block;
+/* carrito */
+
+#cart-button{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#c62828;
+color:white;
+width:55px;
+height:55px;
+border-radius:50%;
+display:none;
+align-items:center;
+justify-content:center;
+font-size:22px;
+cursor:pointer;
 }
 
-
-/* ===== CARRITO EN CELULAR ===== */
-@media (max-width: 768px) {
-  .cart {
-    width: 95%;
-    left: 2.5%;
-    right: auto;
-    bottom: 10px;
-  }
+#cart-count{
+position:absolute;
+top:-5px;
+right:-5px;
+background:#25D366;
+color:white;
+padding:3px 6px;
+border-radius:50%;
+font-size:12px;
 }
 
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f8f8f8;
-      color: #333;
-    }
-    header {
-      background: #111;
-      color: #fff;
-      padding: 20px;
-      text-align: center;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2.2em;
-    }
-    nav {
-      background: #c62828;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      padding: 10px;
-    }
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    nav a:hover {
-      text-decoration: underline;
-    }
-    .hero {
-      background: url('https://scontent-hou1-1.xx.fbcdn.net/v/t39.30808-6/499922610_1170763514804881_8651027106977021029_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeEFz1qoeRo8LNKcizeLSnl8H-cjbg7Gonwf5yNuDsaifJdq5EP1kBYEAENysQ2JUm_hoBLOdyH5cxqvxf3GoJrT&_nc_ohc=2HGS_EuhgeAQ7kNvwFjdSYX&_nc_oc=AdmvKQoOJDDBF5-rTw2iqSky-QdPqacTnZ-1VvwxbkMyaAfkreCCkUkT8hJsmeXMQgM&_nc_zt=23&_nc_ht=scontent-hou1-1.xx&_nc_gid=AfUd8Tm_sGTyVw61xKER6g&oh=00_AfmPXm_FTfE6Zhcdm3P7u5tOKnmG51L5MlB4iN22DwSPvQ&oe=6950A160') center 10%/contain no-repeat;
-      background-size: 90%;
-      height: 300px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      text-shadow: 1px 1px 5px black;
-    }
-    .hero h2 {
-      font-size: 2.5em;
-      background: rgba(0,0,0,0.5);
-      padding: 15px 25px;
-      border-radius: 10px;
-    }
-    section {
-      padding: 40px 20px;
-      max-width: 1100px;
-      margin: auto;
-    }
-    section h3 {
-      text-align: center;
-      margin-bottom: 30px;
-      color: #c62828;
-    }
-    .menu {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      padding: 20px;
-      text-align: center;
-    }
-    .card h4 {
-      margin-bottom: 10px;
-    }
-    .price {
-      color: #c62828;
-      font-weight: bold;
-      font-size: 1.1em;
-    }
-    .contact {
-      text-align: center;
-    }
-    .contact a {
-      display: inline-block;
-      margin-top: 15px;
-      background: #25D366;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    footer {
-      background: #111;
-      color: #fff;
-      text-align: center;
-      padding: 15px;
-      margin-top: 40px;
-      font-size: 0.9em;
-    }
-    /* ===== AJUSTES PARA CELULAR ===== */
-@media (max-width: 768px) {
-
-  header h1 {
-    font-size: 1.6em;
-  }
-
-  nav {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .hero {
-    height: 220px;               /* más compacto en celular */
-    background-size: contain;    /* evita recortes */
-    background-position: center 65%;
-  }
-
-  .hero h2 {
-    font-size: 1.4em;
-    padding: 10px 15px;
-  }
-
-  section {
-    padding: 25px 15px;
-  }
-
-  .menu {
-    grid-template-columns: 1fr;  /* una tarjeta por fila */
-  }
-
-  .card {
-    padding: 15px;
-  }
-
-  .contact a {
-    width: 100%;
-    max-width: 280px;
-  }
+.cart{
+position:fixed;
+bottom:90px;
+right:20px;
+background:white;
+width:320px;
+border-radius:10px;
+padding:15px;
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+display:none;
 }
 
-  </style>
+.cart.active{
+display:block;
+}
+
+.cart ul{
+list-style:none;
+padding:0;
+}
+
+.cart li{
+padding:5px 0;
+border-bottom:1px solid #eee;
+}
+
+.cart button{
+background:#25D366;
+color:white;
+border:none;
+padding:10px;
+width:100%;
+margin-top:10px;
+border-radius:8px;
+cursor:pointer;
+}
+
+input,select{
+width:100%;
+padding:8px;
+margin:5px 0;
+}
+
+</style>
 </head>
-<div id="cart-button" onclick="toggleCart()">
-  🛒 <span id="cart-count">0</span>
-</div>
 
 <body>
 
 <header>
-  <h1>INUGAMI SUSHI</h1>
-  <p>DE LA COCINA A LA PUERTA DE TU CASA 🍣</p>
+<h1>🍣 INUGAMI SUSHI</h1>
+<p>De la cocina a tu casa</p>
 </header>
 
-<nav>
-  <a href="#menu">Menú</a>
-  <a href="#nosotros">Nosotros</a>
-  <a href="#contacto">Contacto</a>
-</nav>
+<div class="categorias">
+<button onclick="filtrar('todos')">Todos</button>
+<button onclick="filtrar('makis')">Makis</button>
+<button onclick="filtrar('gohan')">Gohan</button>
+<button onclick="filtrar('yakimeshi')">Yakimeshi</button>
+<button onclick="filtrar('Bbq')">Bbq</button>
+<button onclick="filtrar('brocheta')">Brochetas</button>
 
-<div class="hero">
-  <h2>Makis, Sushi y más</h2>
 </div>
 
-<section id="menu">
-  <h3>Nuestro Menú</h3>
-  <div class="menu">
-    <div class="<h4>Alitas Spicy</h4>
-      <p>alitas bbk picante,papas a la francesa,pepino,zanahoria y pepino</p>
-      <p class="price">$85MXN</p>
-      <button onclick="addToCart('Alitas ', 85)">Agregar</button>
-    </div>
-      <h4>Maki California</h4>
-      <p>Queso crema,surimi, aguacate y pepino</p>
-      <p class="price">$80 MXN</p>
-      <button onclick="addToCart('Maki California', 80)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Maki California plus</h4>
-      <p>Queso crema,camarón, aguacate y pepino</p>
-      <p class="price">$80 MXN</p>
-      <button onclick="addToCart('Maki California plus', 80)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Maki clásico camarón</h4>
-      <p>Queso crema, manchego y camarón</p>
-      <p class="price">$80 MXN</p>
-      <button onclick="addToCart('Maki Clásico camarón', 80)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Maki clásico pollo</h4>
-      <p>Queso crema, manchego y pollo</p>
-      <p class="price">$80 MXN</p>
-      <button onclick="addToCart('Maki Clásico pollo', 80)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Maki clásico salmón</h4>
-      <p>Queso crema, manchego y salmón</p>
-      <p class="price">$80 MXN</p>
-      <button onclick="addToCart('Maki Clásico salmón', 80)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Maki clásico cangrejo</h4>
-      <p>Queso crema, manchego y cangrejo</p>
-      <p class="price">$80 MXN</p>
-      <button onclick="addToCart('Maki Clásico cangrejo', 80)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Maki clásico arrachera</h4>
-      <p>Queso crema, manchego y arrachera</p>
-      <p class="price">$80 MXN</p>
-      <button onclick="addToCart('Maki Clásico arrachera', 80)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Maki kioto</h4>
-      <p>Camarón tempura,manchego,queso crema,cangrejo y aguacate</p>
-      <p class="price">$95 MXN</p>
-      <button onclick="addToCart('Maki Clásico kioto', 95)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Maki hebi</h4>
-      <p>Medallón de atun, queso crema, anguila y salsa de anguila</p>
-      <p class="price">$120 MXN</p>
-      <button onclick="addToCart('Maki Clásico hebi', 120)">Agregar</button>
-    </div>
-     <div class="card">
-      <h4>Maki hoboku</h4>
-      <p>Salmón, queso crema, aguacate, masago</p>
-      <p class="price">$120 MXN</p>
-      <button onclick="addToCart('Maki Clásico hoboku', 120)">Agregar</button>
-    </div>
-     <div class="card">
-      <h4>Maki nettai</h4>
-      <p>Cangrejo, mango, queso crema y coco rallado</p>
-      <p class="price">$90 MXN</p>
-      <button onclick="addToCart('Maki Clásico nettai', 90)">Agregar</button>
-    </div>
-     <div class="card">
-      <h4>Maki yogan</h4>
-      <p>Queso crema, Manchego, aguacate, chiles toreados y wasabi</p>
-      <p class="price">$95 MXN</p>
-      <button onclick="addToCart('Maki Clásico yogan', 95)">Agregar</button>
-    </div>
-      <div class="card">
-      <h4>Maki inigami</h4>
-      <p>Queso crema, Manchego, aguacate, pepino,salmon, pollo, arrachera,camaron</p>
-      <p class="price">$140MXN</p>
-      <button onclick="addToCart('Maki  inugami', 140)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Gohan camarón</h4>
-      <p>Arroz al vapor, aguacate y camarón</p>
-      <p class="price">$60 MXN</p>
-      <button onclick="addToCart('Gohan camarón', 60)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Gohan pollo</h4>
-      <p>Arroz al vapor, aguacate y pollo</p>
-      <p class="price">$60 MXN</p>
-      <button onclick="addToCart('Gohan pollo', 60)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Gohan arrachera</h4>
-      <p>Arroz al vapor, aguacate y arrachera</p>
-      <p class="price">$60 MXN</p>
-      <button onclick="addToCart('Gohan arrachera', 60)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Brocheta queso</h4>
-      <p>Queso crema empanizado</p>
-      <p class="price">$22 MXN</p>
-      <button onclick="addToCart('Brocheta queso', 22)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Brocheta pollo</h4>
-      <p>Pollo empanizado</p>
-      <p class="price">$22 MXN</p>
-      <button onclick="addToCart('Brocheta pollo', 22)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Brocheta arrachera</h4>
-      <p>Arrachera empanizada</p>
-      <p class="price">$22 MXN</p>
-      <button onclick="addToCart('Brocheta arrachera', 22)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Brocheta camarón</h4>
-      <p>Camarón empanizado</p>
-      <p class="price">$22 MXN</p>
-      <button onclick="addToCart('Brocheta camarón', 22)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Maki Titanic</h4>
-      <p>Queso crema, manchego,pulpo, camarón, pepino, aguacate, cangrejo, doble alga</p>
-      <p class="price">$125 MXN</p>
-      <button onclick="addToCart('Maki Titanic', 125)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Yakimeshi especial<h4>
-        <p>Arroz frito con verduras,tres carnes y 2 brochetas</p>
-        <p class="price">$120 MNM</p>
-        <button onclick="addToCart('Yakimeshi especial'120)">Agregar</button>
-        </div>
-    <div class="card">
-      <h4>Yakimeshi pollo</h4>
-      <p>Arroz frito con verduras y pollo</p>
-      <p class="price">$80 MXN</p>
-      <button onclick="addToCart('Yakimeshi pollo', 80)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Yakimeshi camarón</h4>
-      <p>Arroz frito con verduras y camarón</p>
-      <p class="price">$80 MXN</p>
-      <button onclick="addToCart(' Yakimeshi camarón', 80)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Yakimeshi arrachera</h4>
-      <p>Arroz frito con verduras y arrachera</p>
-      <p class="price">$80 MXN</p>
-      <button onclick="addToCart('Yakimeshi arrachera', 80)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Pasta udon arachera</h4>
-      <p>Pasta udon, verduras en juliana, salsa kushiague y arrachera</p>
-      <p class="price">$80 MXN</p>
-      <button onclick="addToCart('Pasta udon arrachera', 80)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Pasta udon pollo</h4>
-      <p>Pasta udon, verduras en juliana, salsa kushiague y pollo</p>
-      <p class="price">$80 MXN</p>
-      <button onclick="addToCart('Pasta udon pollo', 80)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Pasta udon camarón</h4>
-      <p>Pasta udon, verduras en juliana, salsa kushiague y camarón</p>
-      <p class="price">$80 MXN</p>
-      <button onclick="addToCart('Pasta udon camarón', 80)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Calpi</h4>
-      <p>Fermentado con cítricos</p>
-      <p class="price">$20 MXN</p>
-      <button onclick="addToCart('Calpi', 20)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Refresco</h4>
-      <p>Cocacola 400 ml</p>
-      <p class="price">$20 MXN</p>
-      <button onclick="addToCart('Refresco', 20)">Agregar</button>
-    </div>
-    <div class="card">
-      <h4>Ingrediente extra </h4>
-      <p>Carne o adherezo</p>
-      <p class="price">$10 MXN</p>
-      <button onclick="addToCart('Ingrediente Extra', 10)">Agregar</button>
-    </div>
-  </div>
-</section>
-
-  <div id="cart" class="cart">
-  <h4>🛒 Tu pedido</h4>
-  <label for="cliente"><strong>Nombre del cliente:</strong></label>
-<input 
-  type="text" 
-  id="cliente" 
-  placeholder="Escribe tu nombre"
-  style="
-    width:100%;
-    padding:8px;
-    margin:5px 0 10px 0;
-    border-radius:6px;
-    border:1px solid #ccc;
-  "
->
-
-
-  <ul id="cart-items"></ul>
-
-  <p><strong>Total:</strong> $<span id="cart-total">0</span> MXN</p>
-
-  <label for="zona"><strong>Zona de envío:</strong></label>
-  <select id="zona" onchange="renderCart()">
-    <option value="0">Selecciona tu zona</option>
-    <option value="20">Huiramba ($20)</option>
-    <option value="50">Lagunillas ($50)</option>
-  </select>
-
-  <p><strong>Envío:</strong> $<span id="envio">0</span> MXN</p>
-  <p><strong>Total final:</strong> $<span id="total-final">0</span> MXN</p>
-
-  <button id="checkout">
-    📲 Enviar pedido por WhatsApp
-  </button>
+<div class="card makis">
+<h4>Maki California</h4>
+<p>Surimi, aguacate,pepino y queso crema</p>
+<p class="price">$80</p>
+<button onclick="addToCart('Maki California',80)">+</button>
 </div>
 
-  </div>
+<div class="card makis">
+<h4>Maki Kioto</h4>
+<p>Camarón tempura, manchego, queso crema y aguacate</p>
+<p class="price">$95</p>
+<button onclick="addToCart('Maki Kioto',95)">+</button>
+</div>
 
-  <script>
-const cart = {};
-const cartItems = document.getElementById('cart-items');
-const cartTotal = document.getElementById('cart-total');
-const envioSpan = document.getElementById('envio');
-const totalFinalSpan = document.getElementById('total-final');
-function toggleCart() {
-  document.getElementById('cart').classList.toggle('active');
-}
+<div class="card makis">
+<h4>Maki California Plus</h4>
+<p></p>Camarón, pepino, aguacate, queso crema
+<p class="price">$80</p>
+<button onclick="addToCart('Maki California Plus',95)">+</button>
+</div>
+
+<div class="card makis">
+<h4>Maki pollo</h4>
+<p>Pollo, queso crema y manchego</p>
+<p class="price">$80</p>
+<button onclick="addToCart('Maki Pollo',80)">+</button>
+</div>
+
+<div class="card makis">
+<h4>Maki Camarón</h4>
+<p>Camarón, queso crema, manchego</p>
+<p class="price">$80</p>
+<button onclick="addToCart('Maki Camarón',80)">+</button>
+</div>
+
+<div class="card makis">
+<h4>Maki Salmón</h4>
+<p>Salmón, philadelphia y manchego</p>
+<p class="price">$85</p>
+<button onclick="addToCart('Maki Salmón',85)">+</button>
+</div>
+
+<div class="card makis">
+<h4>Maki Cangrejo</h4>
+<p>Surimi, queso crema, philadelphia</p>
+<p class="price">$80</p>
+<button onclick="addToCart('Maki Cangrejo',80)">+</button>
+</div>
+
+<div class="card makis">
+<h4>Maki Arrachera</h4>
+<p>Arrachera, queso cream, manchego</p>
+<p class="price">$80</p>
+<button onclick="addToCart('Maki Arrachera',80)">+</button>
+</div>
+
+<div class="card makis">
+<h4>Maki Nettai</h4>
+<p>Surimi, mango, queso crema y coco rallado</p>
+<p class="price">$90</p>
+<button onclick="addToCart('Maki Kioto',90)">+</button>
+</div>
+
+<div class="card makis">
+<h4>Maki Inugami</h4>
+<p>De todo un poco</p>
+<p class="price">$140</p>
+<button onclick="addToCart('Maki Inigami',140)">+</button>
+</div>
 
 
-function addToCart(name, price) {
-  if (cart[name]) {
-    cart[name].qty += 1;
-  } else {
-    cart[name] = { price: price, qty: 1 };
-  }
-  renderCart();
-}
+<div class="card makis">
+<h4>Maki Titanic</h4>
+<p>Camarón, surimi, pulpo, queso crema, aguacate, manchego y pepino</p>
+<p class="price">$125</p>
+<button onclick="addToCart('Maki Titanic',125)">+</button>
+</div>
 
-function renderCart() {
-  cartItems.innerHTML = '';
-  let subtotal = 0;
-  let totalItems = 0;
+<div class="card gohan">
+<h4>Gohan Camarón</h4>
+<p>Arroz al vapor</p>
+<p class="price">$60</p>
+<button onclick="addToCart('Gohan Camarón',60)">+</button>
+</div>
 
-  for (let item in cart) {
-    const itemTotal = cart[item].price * cart[item].qty;
-    subtotal += itemTotal;
-    totalItems += cart[item].qty;
+<div class="card gohan">
+<h4>Gohan Pollo</h4>
+<p>Arroz al vapor y pollo</p>
+<p class="price">$60</p>
+<button onclick="addToCart('Gohan Pollo',60)">+</button>
+</div>
 
-    const li = document.createElement('li');
-    li.innerHTML = `
-      ${item} x${cart[item].qty} - $${itemTotal}
-      <span onclick="removeItem('${item}')" style="cursor:pointer;color:red;"> ✖</span>
-    `;
-    cartItems.appendChild(li);
-  }
+<div class="card gohan">
+<h4>Gohan Arrachera</h4>
+<p>Arroz al vapor y arrachera</p>
+<p class="price">$60</p>
+<button onclick="addToCart('Gohan Arrachera',60)">+</button>
+</div>
 
-  const envio = parseInt(document.getElementById('zona').value) || 0;
+<div class="card yakimeshi">
+<h4>Yakimeshi Especial</h4>
+<p>Arroz frito con carnes y verduras, aguacate y 2 brochetas</p>
+<p class="price">$120</p>
+<button onclick="addToCart('Yakimeshi Especial',120)">+</button>
+</div>
 
-  cartTotal.textContent = subtotal;
-  envioSpan.textContent = envio;
-  totalFinalSpan.textContent = subtotal + envio;
+<div class="card yakimeshi">
+<h4>Yakimeshi Camarón</h4>
+<p>Arroz frito con camaró y verduras</p>
+<p class="price">$80</p>
+<button onclick="addToCart('Yakimeshi Camarón',80)">+</button>
+</div>
 
-  /* ===== MOSTRAR / OCULTAR BOTÓN ===== */
-  const cartButton = document.getElementById('cart-button');
-  const cartCount = document.getElementById('cart-count');
+<div class="card yakimeshi">
+<h4>Yakimeshi Pollo</h4>
+<p>Arroz frito con pollo y verduras</p>
+<p class="price">$80</p>
+<button onclick="addToCart('Yakimeshi Pollo',80)">+</button>
+</div>
 
-  if (totalItems > 0) {
-    cartButton.style.display = 'flex';
-    cartCount.textContent = totalItems;
-  } else {
-    cartButton.style.display = 'none';
-    document.getElementById('cart').classList.remove('active');
-  }
-}
+<div class="card yakimeshi">
+<h4>Yakimeshi Arrachera</h4>
+<p>Arroz frito con arrachera y verduras</p>
+<p class="price">$80</p>
+<button onclick="addToCart('Yakimeshi Arrachera',80)">+</button>
+</div>
+
+<div class="card brocheta">
+<h4>Brocheta Camarón</h4>
+<p>Camarón empanizado</p>
+<p class="price">$22</p>
+<button onclick="addToCart('Brocheta Camarón',22)">+</button>
+</div>
+
+<div class="card brocheta">
+<h4>Brocheta Pollo</h4>
+<p>Pollo empanizado</p>
+<p class="price">$22</p>
+<button onclick="addToCart('Brocheta Pollo',22)">+</button>
+</div>
+
+<div class="card brocheta">
+<h4>Brocheta Arrachera</h4>
+<p>Arrachera empanizada</p>
+<p class="price">$22</p>
+<button onclick="addToCart('Brocheta Camarón',22)">+</button>
+</div>
+
+<div class="card brocheta">
+<h4>Brocheta queso crema</h4>
+<p>Queso crema empanizado</p>
+<p class="price">$22</p>
+<button onclick="addToCart('Brocheta Queso crema',22)">+</button>
+</div>
+
+<div class="card brocheta">
+<h4>Brocheta Manchego</h4>
+<p>Camarón empanizado</p>
+<p class="price">$22</p>
+<button onclick="addToCart('Brocheta Manchego',22)">+</button>
+</div>
+
+<div class="card Bbq">
+<h4>Alitas BBQ Spicy</h4>
+<p>Alitas bbq picantes con papas, lechuga,pepino, zanahoria </p>
+<p class="price">$85</p>
+<button onclick="addToCart('Alitas BBQ Spicy',85)">+</button>
+</div>
 
 
-function removeItem(name) {
-  delete cart[name];
-  renderCart();
-}
-</script>
+<div class="card Bbq">
+<h4>Costillas BBQ Spicy</h4>
+<p>Costillas corte Back Rib  bbq picantes con papas, lechuga,pepino, zanahoria </p>
+<p class="price">$130</p>
+<button onclick="addToCart('Alitas BBQ Spicy',85)">+</button>
+</div>
+
+</div>
+
+<div id="cart-button" onclick="toggleCart()">
+🛒 <span id="cart-count">0</span>
+</div>
+
+<div id="cart" class="cart">
+
+<h3>Tu pedido</h3>
+
+<label>Nombre</label>
+<input type="text" id="cliente">
+
+<ul id="cart-items"></ul>
+
+<p>Total: $<span id="cart-total">0</span></p>
+
+<label>Zona de envío</label>
+<select id="zona" onchange="renderCart()">
+<option value="0">Selecciona</option>
+<option value="20">Huiramba $20</option>
+<option value="50">Lagunillas $50</option>
+</select>
+
+<p>Total final: $<span id="total-final">0</span></p>
+
+<button id="checkout">Enviar por WhatsApp</button>
+
+</div>
+
 <script>
-document.getElementById('checkout').onclick = () => {
 
-  if (Object.keys(cart).length === 0) {
-    alert('Tu carrito está vacío');
-    return;
-  }
+const cart={}
 
-  const nombre = document.getElementById('cliente').value.trim();
-  if (!nombre) {
-    alert('Por favor escribe tu nombre');
-    return;
-  }
+function toggleCart(){
+document.getElementById("cart").classList.toggle("active")
+}
 
-  const zonaSelect = document.getElementById('zona');
-  const envio = parseInt(zonaSelect.value);
+function addToCart(name,price){
 
-  if (!envio) {
-    alert('Por favor selecciona tu zona de envío');
-    return;
-  }
+if(cart[name]){
+cart[name].qty++
+}else{
+cart[name]={price:price,qty:1}
+}
 
-  let mensaje = '🍣 *Pedido Inugami Sushi* 🍣%0A%0A';
-  mensaje += `👤 *Cliente:* ${nombre}%0A%0A`;
+renderCart()
 
-  let subtotal = 0;
+}
 
-  for (let item in cart) {
-    const totalItem = cart[item].price * cart[item].qty;
-    subtotal += totalItem;
-    mensaje += `• ${item} x${cart[item].qty} - $${totalItem}%0A`;
-  }
+function renderCart(){
 
-  mensaje += `%0A💵 Subtotal: $${subtotal}`;
-  mensaje += `%0A🚚 Envío (${zonaSelect.options[zonaSelect.selectedIndex].text}): $${envio}`;
-  mensaje += `%0A💰 *Total: $${subtotal + envio} MXN*`;
+const items=document.getElementById("cart-items")
+items.innerHTML=""
 
-  const telefono = '524341154467';
-  window.open(`https://wa.me/${telefono}?text=${mensaje}`, '_blank');
-};
+let total=0
+let count=0
+
+for(let item in cart){
+
+let subtotal=cart[item].price*cart[item].qty
+total+=subtotal
+count+=cart[item].qty
+
+items.innerHTML+=`
+<li>${item} x${cart[item].qty} $${subtotal}</li>
+`
+
+}
+
+document.getElementById("cart-total").textContent=total
+
+let envio=parseInt(document.getElementById("zona").value)||0
+
+document.getElementById("total-final").textContent=total+envio
+
+if(count>0){
+document.getElementById("cart-button").style.display="flex"
+document.getElementById("cart-count").textContent=count
+}
+
+}
+
+function filtrar(cat){
+
+let cards=document.querySelectorAll(".card")
+
+cards.forEach(c=>{
+
+if(cat==="todos"){
+c.style.display="block"
+}else{
+c.style.display=c.classList.contains(cat)?"block":"none"
+}
+
+})
+
+}
+
+document.getElementById("checkout").onclick=()=>{
+
+let nombre=document.getElementById("cliente").value
+
+if(!nombre){
+alert("Escribe tu nombre")
+return
+}
+
+let mensaje="🍣 Pedido Inugami Sushi %0A%0A"
+mensaje+=`Cliente: ${nombre}%0A`
+
+let total=0
+
+for(let item in cart){
+
+let subtotal=cart[item].price*cart[item].qty
+total+=subtotal
+
+mensaje+=`${item} x${cart[item].qty} $${subtotal}%0A`
+
+}
+
+let envio=parseInt(document.getElementById("zona").value)||0
+
+mensaje+=`%0AEnvío $${envio}`
+mensaje+=`%0ATotal $${total+envio}`
+
+let telefono="524341154467"
+
+window.open(`https://wa.me/${telefono}?text=${mensaje}`)
+
+}
 
 </script>
 
-<section id="nosotros">
-  <h3>Sobre Nosotros</h3>
-  <p style="text-align:center; max-width:800px; margin:auto;">
-    En <strong>Inugami Sushi</strong> preparamos comida japonesa fresca y deliciosa,
-    utilizando ingredientes de calidad y recetas que combinan tradición y sabor.
-    Perfecto para compartir con amigos o disfrutar en casa.
-  </p>
-</section>
-<section id="horarios">
-  <h3>Horarios y Días de Servicio</h3>
-  <div class="horarios">
-    <p><strong>Domíngo:</strong> Cerrado</p>
-    <p><strong>Lunes a Viernes:</strong> 1:00 PM – 6:00 PM</p>
-    <p><strong>Sábado:</strong> 1:00 PM – 4:00 PM</p>
-  </div>
-</section>
-
-<section id="contacto" class="contact">
-  <h3>Pedidos y Contacto</h3>
-  <p>📍 El Pedregal,Huiramba, Michoacán</p>
-  <p>📞 Pedidos por WhatsApp</p>
-  <p>costo de envío: Huiramba $20.00 Lagunillas $50.00</p>
-  <a href="https://wa.me/524341154467" target="_blank">Ir a whatsapp</a>
-</section>
-
-<footer>
-  <p>© 2025 Inugami Sushi | Todos los derechos reservados</p>
-</footer>
+</body>
+</html>
+```
