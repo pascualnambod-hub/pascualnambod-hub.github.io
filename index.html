@@ -372,6 +372,9 @@ margin:5px 0;
 <label>Nombre</label>
 <input type="text" id="cliente">
 
+<label>Dirección</label>
+<input type="text" id="direccion" placeholder="Ej: Calle, número, colonia">
+
 <ul id="cart-items"></ul>
 
 <p>Total: $<span id="cart-total">0</span></p>
@@ -381,6 +384,8 @@ margin:5px 0;
 <option value="0">Selecciona</option>
 <option value="20">Huiramba $20</option>
 <option value="50">Lagunillas $50</option>
+<option value="20">El Carmen $20</option>
+<option value="20">El pedregal $20</option>
 </select>
 
 <p>Total final: $<span id="total-final">0</span></p>
@@ -461,14 +466,16 @@ c.style.display=c.classList.contains(cat)?"block":"none"
 document.getElementById("checkout").onclick=()=>{
 
 let nombre=document.getElementById("cliente").value
+let direccion=document.getElementById("direccion").value
 
-if(!nombre){
-alert("Escribe tu nombre")
+if(!nombre || !direccion){
+alert("Escribe tu nombre y dirección")
 return
 }
 
 let mensaje="🍣 Pedido Inugami Sushi %0A%0A"
 mensaje+=`Cliente: ${nombre}%0A`
+mensaje+=`%0A📍 Dirección: ${direccion}%0A`
 
 let total=0
 
